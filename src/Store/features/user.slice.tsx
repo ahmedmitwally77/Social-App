@@ -1,6 +1,7 @@
 import { userState } from "@/Types/user.type";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const loginFunc =createAsyncThunk("user/login", async (values:{email:string,password:string})=>{
   const option={
