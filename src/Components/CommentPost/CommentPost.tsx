@@ -1,7 +1,7 @@
 import { Comment } from "@/Types/post.types";
-import { Box, CardHeader, IconButton, Typography } from "@mui/material";
+import { Box, CardHeader, Typography } from "@mui/material";
 import React from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function CommentPost({ commentInfo }: { commentInfo: Comment }) {
