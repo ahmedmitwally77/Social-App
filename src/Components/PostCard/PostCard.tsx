@@ -15,16 +15,26 @@ import CommentIcon from "@mui/icons-material/Comment";
 import CommentPost from "../CommentPost/CommentPost";
 import { Box, Button, Divider, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-export default function PostCard({ post, all=false }) {
+import { Post } from "@/Types/post.types"; 
+
+interface PostCardProps {
+  post: Post; // ✅ تحديد نوع post
+  all?: boolean;
+}
+
+export default function PostCard({ post, all = false }: PostCardProps) { // ✅ تطبيق النوع
   const [love, setlove] = React.useState(false);
   const [like, setlike] = React.useState(false);
-  const router = useRouter(); 
+  const router = useRouter();
+
   function handleClickLove() {
     setlove(!love);
   }
+
   function handleClickLike() {
     setlike(!like);
   }
+
   return (
     <Card sx={{ width: "100%", padding: 2, borderRadius: 4, boxShadow: 5 }}>
       <CardHeader
@@ -34,7 +44,7 @@ export default function PostCard({ post, all=false }) {
             width={40}
             height={40}
             alt={`avatar of ${post.user.name}`}
-          ></Image>
+          />
         }
         action={
           <IconButton aria-label="settings">
@@ -54,26 +64,20 @@ export default function PostCard({ post, all=false }) {
       {post.image && (
         <Image
           src={post.image}
-          alt="Remy Sharp"
+          alt="Post Image"
           className="object-cover"
           width={600}
-          height={100}
+          height={400}
           style={{ width: "100%", height: "400px", objectFit: "cover" }}
-        ></Image>
+        />
       )}
 
       <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-        <IconButton aria-label="Like">
-          <ThumbUpIcon
-            sx={{ color: like ? "blue" : "" }}
-            onClick={handleClickLike}
-          />
+        <IconButton aria-label="Like" onClick={handleClickLike}>
+          <ThumbUpIcon sx={{ color: like ? "blue" : "" }} />
         </IconButton>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon
-            sx={{ color: love ? "red" : "" }}
-            onClick={handleClickLove}
-          />
+        <IconButton aria-label="add to favorites" onClick={handleClickLove}>
+          <FavoriteIcon sx={{ color: love ? "red" : "" }} />
         </IconButton>
         <IconButton aria-label="Comment">
           <CommentIcon />
@@ -92,9 +96,7 @@ export default function PostCard({ post, all=false }) {
               variant="contained"
               fullWidth
               sx={{ my: 1 }}
-              onClick={() => {
-                router.push(`/posts/${post._id}`);
-              }}
+              onClick={() => router.push(`/posts/${post._id}`)}
             >
               Show More Comments
             </Button>
@@ -104,17 +106,17 @@ export default function PostCard({ post, all=false }) {
         {post.comments?.length > 1 && all && (
           <Box sx={{ mt: 2 }}>
             <Divider sx={{ mb: 2, color: "blue" }}>Comments</Divider>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2}}>
-            {post.comments.map((comment: Comment) => (
-              <CommentPost commentInfo={comment} key={comment._id} />
-            ))}
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {post.comments.map((comment) => (
+                <CommentPost commentInfo={comment} key={comment._id} />
+              ))}
             </Box>
           </Box>
         )}
 
         <TextField
           fullWidth
-          sx={{ mt:2, borderRadius: 8 }}
+          sx={{ mt: 2, borderRadius: 8 }}
           multiline
           minRows={1}
           maxRows={5}

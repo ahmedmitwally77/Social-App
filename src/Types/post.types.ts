@@ -1,5 +1,5 @@
 export type PostType = {
-  _id: Key | null | undefined;
+  _id?: string | null | undefined;
   posts:null | Post[]
 }
 

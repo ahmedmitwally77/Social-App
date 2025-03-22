@@ -2,17 +2,18 @@
 "use client";
 import PostCard from "@/Components/PostCard/PostCard";
 import { useAppSelector } from "@/Hooks/store.hook";
-import { PostType } from "@/Types/post.types";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "@/Components/Loading/Loading";
 import FormPost from "@/Components/FormPost/FormPost";
+import { Post } from "@/Types/post.types";
+
 
 export default function Home() {
   const token = useAppSelector((state) => state.userReducer.token);
-  const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [limit, setLimit] = useState(5);
   const [loading, setLoading] = useState(false);
 
@@ -68,7 +69,7 @@ export default function Home() {
         >
           <FormPost />
           {posts.length > 0 ? (
-            posts.map((post: PostType) => (
+            posts.map((post: Post) => (
               <PostCard key={post._id} post={post} />
             ))
           ) : (
