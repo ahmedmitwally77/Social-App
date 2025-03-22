@@ -1,0 +1,5 @@
+* Ajax             => axios
+* form             => formik
+* State Management => Redux
+* Style [UI]       => MUI
+* Icons            => Material Icons
