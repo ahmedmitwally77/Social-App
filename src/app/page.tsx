@@ -10,25 +10,29 @@ import Loading from "@/Components/Loading/Loading";
 import FormPost from "@/Components/FormPost/FormPost";
 import { Post } from "@/Types/post.types";
 
-
 export default function Home() {
   const token = useAppSelector((state) => state.userReducer.token);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [limit, setLimit] = useState(5);
+  const [page, setpage] = useState<number>(1);
   const [loading, setLoading] = useState(false);
 
   async function getAllPosts() {
     if (loading) return;
-    setLoading(true);
     if (posts.length === 0) setLoading(false);
+    else setLoading(true);
     try {
       const response = await axios.get(
-        `https://linked-posts.routemisr.com/posts?page=1&limit=${limit}`,
+        `https://linked-posts.routemisr.com/posts?page=${page}&limit=5`,
         {
           headers: { token },
         }
       );
-      setPosts((prevPosts) => [...(prevPosts || []), ...response.data.posts]);
+      setPosts((prevPosts) => {
+        const newPosts = response.data.posts.filter(
+          (newPost: Post) => !prevPosts.some((post) => post._id === newPost._id)
+        );
+        return [...prevPosts, ...newPosts];
+      });
     } catch (error) {
       console.error("حدث خطأ أثناء جلب البيانات:", error);
     }
@@ -37,16 +41,17 @@ export default function Home() {
 
   useEffect(() => {
     getAllPosts();
-  }, [limit]);
+  }, [page]);
 
   function handleScroll() {
     if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
       !loading
     ) {
-      setLimit((prevLimit) => prevLimit + 5);
+      setpage((prevPage) => prevPage + 1);
     }
   }
+
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -69,9 +74,7 @@ export default function Home() {
         >
           <FormPost />
           {posts.length > 0 ? (
-            posts.map((post: Post) => (
-              <PostCard key={post._id} post={post} />
-            ))
+            posts.map((post: Post) => <PostCard key={post._id} post={post} />)
           ) : (
             <Loading />
           )}

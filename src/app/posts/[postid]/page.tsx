@@ -8,12 +8,12 @@ import React, { useEffect, useState, useCallback, use } from "react";
 import { Post } from "@/Types/post.types";
 
 export default function Page({ params }: { params: Promise<{ postid: string }> }) {
-  const { postid } = use(params); // ✅ Unwrapping the Promise
+  const { postid } = use(params);
   const token = useAppSelector((state) => state.userReducer.token);
   const [postDetails, setpostDetails] = useState<Post | null>(null);
 
   const getAllpostDetails = useCallback(async () => {
-    if (!postid || !token) return; // Prevent API call if missing data
+    if (!postid || !token) return;
     try {
       const response = await axios.get(`https://linked-posts.routemisr.com/posts/${postid}`, {
         headers: { token },
