@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import Loading from "@/Components/Loading/Loading";
 import FormPost from "@/Components/FormPost/FormPost";
 import { Post } from "@/Types/post.types";
+import SkeltonePost from "@/Components/SkeltonePost/SkeltonePost";
 
 export default function Home() {
   const token = useAppSelector((state) => state.userReducer.token);
@@ -32,7 +33,8 @@ export default function Home() {
           (newPost: Post) => !prevPosts.some((post) => post._id === newPost._id)
         );
         return [...prevPosts, ...newPosts];
-      });
+      }
+    );
     } catch (error) {
       console.error("حدث خطأ أثناء جلب البيانات:", error);
     }
@@ -76,7 +78,7 @@ export default function Home() {
           {posts.length > 0 ? (
             posts.map((post: Post) => <PostCard key={post._id} post={post} />)
           ) : (
-            <Loading />
+            <SkeltonePost count={3}/>
           )}
           {loading && (
             <p style={{ textAlign: "center" }}>

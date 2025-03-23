@@ -64,7 +64,9 @@ const { token } = useAppSelector((state) => state.userReducer);
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+      <Link href="/profile">Profile</Link>
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
@@ -132,11 +134,16 @@ const { token } = useAppSelector((state) => state.userReducer);
             component="div"
             sx={{mr:6 }}
           >
-           <Link href="/"> Social App</Link>
+          <Link href="/"> Social App</Link>
           </Typography>
           {token ? (
             <MenuItem>
               <Link href="/" className={pathname === "/" ? "active" : ""}>Home</Link>
+            </MenuItem>
+          ): null}
+          {token ? (
+            <MenuItem>
+              <Link href="/" className={pathname === "/profile" ? "active" : ""}>Profile</Link>
             </MenuItem>
           ): null}
           {!token ? (

@@ -36,12 +36,12 @@ export default function Profile() {
   }, []);
 
   return (
-    <Box
+      <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "100vh",
+        height: "80vh",
         width: "70%",
         margin: "auto",
         mt: "50px",
@@ -86,6 +86,5 @@ export default function Profile() {
         </Stack>
       )}
     </Box>
-    
   );
 }
