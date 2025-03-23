@@ -43,7 +43,7 @@ export default function Home() {
 
   useEffect(() => {
     getAllPosts();
-  }, [page]);
+  }, [page,posts]);
 
   function handleScroll() {
     if (

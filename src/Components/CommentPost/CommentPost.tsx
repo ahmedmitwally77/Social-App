@@ -15,7 +15,7 @@ export default function CommentPost({ commentInfo }: { commentInfo: Comment }) {
         subheader={new Date(commentInfo.createdAt).toDateString()}
       />
 
-      <Typography component={"p"} sx={{pl:1}}>
+      <Typography component={"p"} sx={{pl:1 }}>
         <span>{commentInfo.content}</span>
       </Typography>
     </Box>

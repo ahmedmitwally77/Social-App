@@ -15,16 +15,23 @@ import CommentIcon from "@mui/icons-material/Comment";
 import CommentPost from "../CommentPost/CommentPost";
 import { Box, Button, Divider, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Post } from "@/Types/post.types"; 
+import { Post } from "@/Types/post.types";
+import SendIcon from "@mui/icons-material/Send";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { FaSpinner } from "react-icons/fa";
 
 interface PostCardProps {
-  post: Post; // ✅ تحديد نوع post
+  post: Post; 
   all?: boolean;
 }
 
-export default function PostCard({ post, all = false }: PostCardProps) { // ✅ تطبيق النوع
+export default function PostCard({ post, all = false }: PostCardProps) {
+  const commentRef = React.useRef<HTMLInputElement>(null);
   const [love, setlove] = React.useState(false);
   const [like, setlike] = React.useState(false);
+  const [postLoading, setpostLoading] = React.useState(false);
+  
   const router = useRouter();
 
   function handleClickLove() {
@@ -35,6 +42,33 @@ export default function PostCard({ post, all = false }: PostCardProps) { // ✅ 
     setlike(!like);
   }
 
+  function addComment({value}: {value: string | undefined}) {
+    setpostLoading(true);
+    const option = {
+      method: "POST",
+      url: `https://linked-posts.routemisr.com/comments`,
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+      data: {
+        content: value,
+        post: post._id,
+      },
+    }
+    axios.request(option).then((response) => {      
+      if (response.data.message === "success") {
+        toast.success("Comment added successfully");
+      }
+    }).catch((error) => {
+      toast.error(error.response.data.error);
+    })
+    .finally(() => {
+      setpostLoading(false);
+      commentRef.current!.value = "";
+    })
+  }
+
+
   return (
     <Card sx={{ width: "100%", padding: 2, borderRadius: 4, boxShadow: 5 }}>
       <CardHeader
@@ -43,7 +77,7 @@ export default function PostCard({ post, all = false }: PostCardProps) { // ✅ 
             src={post.user.photo}
             width={40}
             height={40}
-            alt={`avatar of ${post.user.name}`}
+            alt={`avatar of ${post.user.name} image`}
           />
         }
         action={
@@ -114,6 +148,7 @@ export default function PostCard({ post, all = false }: PostCardProps) { // ✅ 
           </Box>
         )}
 
+        <Box sx={{position:"relative"}}>
         <TextField
           fullWidth
           sx={{ mt: 2, borderRadius: 8 }}
@@ -121,7 +156,14 @@ export default function PostCard({ post, all = false }: PostCardProps) { // ✅ 
           minRows={1}
           maxRows={5}
           placeholder="Add a comment"
+          inputRef={commentRef}
         />
+        <Button disabled={postLoading} onClick={() => addComment({value: commentRef.current?.value})} sx={{ position: "absolute", top: "60%", transform: "translateY(-50%)", right: 10 }} variant="contained">
+          {postLoading ? <FaSpinner className="animate-spin" />: <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            Send
+          <SendIcon /></Box>}
+        </Button>
+        </Box>
       </Box>
     </Card>
   );
